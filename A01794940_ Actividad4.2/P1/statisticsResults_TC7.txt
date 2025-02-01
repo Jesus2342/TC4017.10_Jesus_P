@@ -1,0 +1,9 @@
+Statistical Results:
+Count: 12769
+Mean: 2.474673954997149e+20
+Median: 2.4664097307429e+20
+Mode: #NA
+Standard deviation: 1.4460564700984703e+20
+Variance: 2.0912431153806367e+40
+
+Execution time: 0.053267 seconds
