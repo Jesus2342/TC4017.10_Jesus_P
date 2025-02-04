@@ -1,0 +1,15 @@
+Results from TC3
+-----------------------------------------------------
+Files to be processed
+Product list ----> TC1.ProductList.json
+Sales list  -----> TC3.Sales.json
+-----------------------------------------------------
+** Product list loaded
+** Sales list loaded
+-----------------------------------------------------
+Product Elotes not found in product list
+Product Frijoles not found in product list
+Total is 165235.37
+-----------------------------------------------------
+Execution Time: 0.003 seconds
+-----------------------------------------------------
