@@ -10,7 +10,7 @@ Type the name of the text file in INPUT_FILE then
 run ---> python compute_sales.py TC1.ProductList.json TC1.Sales.json
 run ---> python compute_sales.py TC1.ProductList.json TC2.Sales.json
 run ---> python compute_sales.py TC1.ProductList.json TC3.Sales.json
-"""""
+""" ""
 
 import sys
 import json
@@ -21,9 +21,9 @@ start_time = time.time()
 PRODUCT_LIST_JSON = sys.argv[1]
 sales_list_json = sys.argv[2]
 system_output = []
-TEST_CASE = "TC3"
+TEST_CASE = "TC1"
 AUX_TITLE = "SalesResults_"
-OUTPUT_FILE = AUX_TITLE+TEST_CASE+".txt"
+OUTPUT_FILE = AUX_TITLE + TEST_CASE + ".txt"
 
 if len(sys.argv) != 3:
     system_output.append(">>>>Files were NOT entered, try again!!>>>>")
@@ -69,10 +69,7 @@ for sale in sales_list_json:
     if PRODUCE_PRICE is not None:
         cost = PRODUCE_PRICE * quantity
         TOTAL_SALES += cost
-    else:
-        error_msg3 = f"Product {product_name} not found in product list"
-        print(error_msg3)
-        system_output.append(error_msg3)
+
 system_output.append(f"Total is {round(TOTAL_SALES,2)}")
 system_output.append("-------------------------------------------")
 
