@@ -1,0 +1,14 @@
+Results from TC2
+-------------------------------------------
+Files to be processed
+Product list ----> TC1.ProductList.json
+Sales list  -----> TC2.Sales.json
+-------------------------------------------
+** Product list loaded
+** Sales list loaded
+-------------------------------------------
+Total is 166568.23
+-------------------------------------------
+Execution Time: 0.0038 seconds
+-------------------------------------------
+
