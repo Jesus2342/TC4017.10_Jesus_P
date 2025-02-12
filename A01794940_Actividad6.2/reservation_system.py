@@ -1,41 +1,61 @@
 from json_handler import load_json, save_json
 
-HOTEL_FILE = "hotels.json"
+HOTEL_FILE = "hotel_record.json"
 
 class Hotel:
     def __init__(self, hotel_name, hotel_loc, num_rooms):
         self.hotel_name = hotel_name
         self.hotel_loc = hotel_loc
         self.num_rooms = num_rooms
-        self.availability_rooms = num_rooms  # Initially, all rooms are available
+        self.availability_rooms = num_rooms
+        self.hotel_record = load_json(HOTEL_FILE)  
+
+    def save_hotels(self):
+        save_json(HOTEL_FILE, self.hotel_record)  
 
     def define_hotel(self):
         """Save hotel data to JSON"""
-        
-        hotels = load_json(HOTEL_FILE)
-        hotels[self.hotel_name] = {
+        self.hotel_record[self.hotel_name] = {  
             "location": self.hotel_loc,
             "num_rooms": self.num_rooms,
-            "available_rooms": self.availability_rooms
+            "available_rooms": self.availability_rooms,
         }
-        
-        save_json(HOTEL_FILE, hotels)
+        self.save_hotels()
 
     def delete_hotel(self):
-        hotels = load_json(HOTEL_FILE)
-        
-        if self.hotel_name in hotels:
-            del hotels[self.hotel_name]
-            save_json(HOTEL_FILE, hotels)
+        if self.hotel_name in self.hotel_record:  
+            del self.hotel_record[self.hotel_name]
+            self.save_hotels()
 
     def show_free_rooms(self):
-        hotels = load_json(HOTEL_FILE)
-        
-        if self.hotel_name in hotels:
-            print(f"Number of rooms avaialble is: {hotels[self.hotel_name]['available_rooms']}")
-            
+        if self.hotel_name in self.hotel_record:  
+            print(f"Number of rooms available: {self.hotel_record[self.hotel_name]['available_rooms']}")
         else:
-            print("The Hotel was not found")
+            print("The hotel was not found")
+
+    def book_room(self):
+        if self.hotel_name in self.hotel_record:  
+            if self.hotel_record[self.hotel_name]["available_rooms"] > 0:
+                self.hotel_record[self.hotel_name]["available_rooms"] -= 1
+                self.save_hotels()
+                print("Room booked successfully!")
+            else:
+                print("No rooms available at this time")
+        else:
+            print("Hotel not found")
+
+    def cancel_book(self):
+        if self.hotel_name in self.hotel_record: 
+            if self.hotel_record[self.hotel_name]["available_rooms"] < self.hotel_record[self.hotel_name]["num_rooms"]:
+                self.hotel_record[self.hotel_name]["available_rooms"] += 1
+                self.save_hotels()
+                print("Booking canceled successfully!")
+            else:
+                print("No active reservations")
+        else:
+            print("Hotel not found")
+
+
         
         
 
@@ -78,3 +98,10 @@ class Reservation:
         """Cancel a reservation."""
         pass
 
+h1 = Hotel("Grand Plaza", "New York", 100)
+h1.define_hotel()
+
+h1.show_free_rooms()
+
+h1.book_room()
+h1.show_free_rooms()
