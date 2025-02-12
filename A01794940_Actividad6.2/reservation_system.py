@@ -10,7 +10,7 @@ class Hotel:
         self.availability_rooms = num_rooms
         self.hotel_record = load_json(HOTEL_FILE)  
 
-    def save_hotels(self):
+    def save_hotel_record(self):
         save_json(HOTEL_FILE, self.hotel_record)  
 
     def define_hotel(self):
@@ -20,12 +20,12 @@ class Hotel:
             "num_rooms": self.num_rooms,
             "available_rooms": self.availability_rooms,
         }
-        self.save_hotels()
+        self.save_hotel_record()
 
     def delete_hotel(self):
         if self.hotel_name in self.hotel_record:  
             del self.hotel_record[self.hotel_name]
-            self.save_hotels()
+            self.save_hotel_record()
 
     def show_free_rooms(self):
         if self.hotel_name in self.hotel_record:  
@@ -37,7 +37,7 @@ class Hotel:
         if self.hotel_name in self.hotel_record:  
             if self.hotel_record[self.hotel_name]["available_rooms"] > 0:
                 self.hotel_record[self.hotel_name]["available_rooms"] -= 1
-                self.save_hotels()
+                self.save_hotel_record()
                 print("Room booked successfully!")
             else:
                 print("No rooms available at this time")
@@ -48,7 +48,7 @@ class Hotel:
         if self.hotel_name in self.hotel_record: 
             if self.hotel_record[self.hotel_name]["available_rooms"] < self.hotel_record[self.hotel_name]["num_rooms"]:
                 self.hotel_record[self.hotel_name]["available_rooms"] += 1
-                self.save_hotels()
+                self.save_hotel_record()
                 print("Booking canceled successfully!")
             else:
                 print("No active reservations")
@@ -56,24 +56,29 @@ class Hotel:
             print("Hotel not found")
 
 
-        
-        
-
-
-
+#estaba definiendo como crear el book id, maybe con un random
+#lo mismo con customer_room_ quiza con un random 
+CUSTOMER_FILE = "customer_record.json"
 class Customer:
-    def __init__(self, customer_name, customer_room):
+    def __init__(self, customer_name,customer_phone):
         self.customer_name = customer_name
-        self.customer_room = customer_room
-        self.customer_reservations = []  
+        self.customer_phone = customer_phone
+        self.customer_record = load_json(CUSTOMER_FILE)  
 
+   def save_customer_record(self):
+        save_json(CUSTOMER_FILE, self.customer_record) 
+        
     def create_customer(self):
-        """Create a new customer entry."""
-        pass
-
+        self.customer_record[self.customer_name] = {
+            "book_id":
+            "phone" self.customer_phone
+            "customer_room":
+        }
+            
+        
     def delete_customer(self):
-        """Delete a customer entry."""
-        pass
+        self.customer_record.remove([self.customer_name])    
+    
 
     def show_customer_info(self):
         """Display customer details."""
@@ -98,10 +103,3 @@ class Reservation:
         """Cancel a reservation."""
         pass
 
-h1 = Hotel("Grand Plaza", "New York", 100)
-h1.define_hotel()
-
-h1.show_free_rooms()
-
-h1.book_room()
-h1.show_free_rooms()
