@@ -1,5 +1,6 @@
 from json_handler import load_json, save_json
-
+import uuid
+from random import randint
 HOTEL_FILE = "hotel_record.json"
 
 class Hotel:
@@ -27,11 +28,15 @@ class Hotel:
             del self.hotel_record[self.hotel_name]
             self.save_hotel_record()
 
-    def show_free_rooms(self):
-        if self.hotel_name in self.hotel_record:  
-            print(f"Number of rooms available: {self.hotel_record[self.hotel_name]['available_rooms']}")
-        else:
-            print("The hotel was not found")
+    def display_hotel_info(self): 
+        print(f"Hotel details: {self.hotel_record[self.hotel_name]}")
+        
+    def modify_hotel(self, new_location=None, new_num_rooms=None, new_available_rooms=None):
+        self.hotel_record[self.hotel_name]["location"] = new_location
+        self.hotel_record[self.hotel_name]["num_rooms"] = new_num_rooms
+        self.hotel_record[self.hotel_name]["available_rooms"] = new_available_rooms
+        self.save_hotel_record()
+        print(f"Hotel {self.hotel_name} updated successfully.")
 
     def book_room(self):
         if self.hotel_name in self.hotel_record:  
@@ -56,41 +61,62 @@ class Hotel:
             print("Hotel not found")
 
 
-#estaba definiendo como crear el book id, maybe con un random
-#lo mismo con customer_room_ quiza con un random 
+
 CUSTOMER_FILE = "customer_record.json"
+
 class Customer:
-    def __init__(self, customer_name,customer_phone):
+    def __init__(self, customer_name, customer_phone):
         self.customer_name = customer_name
         self.customer_phone = customer_phone
-        self.customer_record = load_json(CUSTOMER_FILE)  
+        self.customer_record = load_json(CUSTOMER_FILE)
 
-   def save_customer_record(self):
-        save_json(CUSTOMER_FILE, self.customer_record) 
-        
+    def save_customer_record(self):
+        save_json(CUSTOMER_FILE, self.customer_record)
+
     def create_customer(self):
-        self.customer_record[self.customer_name] = {
-            "book_id":
-            "phone" self.customer_phone
-            "customer_room":
+        """Creates a new customer and assigns a unique ID."""
+        customer_id = str(uuid.uuid4())  
+        self.customer_record[customer_id] = {
+            "name": self.customer_name,
+            "phone": self.customer_phone,
+            "customer_room": randint(1, 100),
         }
-            
-        
-    def delete_customer(self):
-        self.customer_record.remove([self.customer_name])    
-    
+        print(f"Customer {self.customer_name} created successfully with ID {customer_id}")
+        self.save_customer_record()
 
-    def show_customer_info(self):
-        """Display customer details."""
-        pass
+    def customer_info(self, customer_id):
+        """Retrieves customer details using their unique ID."""
+        if customer_id in self.customer_record:
+            print(f"Customer details: {self.customer_record[customer_id]}")
+        else:
+            print("Customer not found.")
 
-    def edit_customer_info(self, customer_name=None):
-        """Modify customer details."""
-        pass
+    def delete_customer(self, customer_id):
+        """Deletes a customer by their ID."""
+        if customer_id in self.customer_record:
+            del self.customer_record[customer_id]
+            self.save_customer_record()
+            print(f"Customer {customer_id} deleted successfully.")
+        else:
+            print("Customer not found.")
+
+    def edit_customer_info(self, customer_id, new_name=None, new_phone=None):
+        """Edits a customer's information."""
+        if customer_id in self.customer_record:
+            if new_name:
+                self.customer_record[customer_id]["name"] = new_name
+            if new_phone:
+                self.customer_record[customer_id]["phone"] = new_phone
+
+            self.save_customer_record()
+            print(f"Customer {customer_id} updated successfully.")
+        else:
+            print("Customer not found.")
 
 
 class Reservation:
     def __init__(self, book_number, customer_name, hotel_name):
+        
         self.book_number = book_number
         self.customer_name = customer_name
         self.hotel_name = hotel_name
