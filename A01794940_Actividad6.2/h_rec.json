@@ -1,7 +1,7 @@
 {
     "Grand Plaza": {
         "location": "Guadalajara",
-        "num_rooms": 100,
-        "available_rooms": 100
+        "n_rooms": 100,
+        "free_rooms": 100
     }
 }

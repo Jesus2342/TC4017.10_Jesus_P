@@ -1,131 +1,177 @@
-from json_handler import load_json, save_json
+"""Necessary modules to hanlde Json saving/loading and to create unique IDs"""
 import uuid
 from random import randint
-HOTEL_FILE = "hotel_record.json"
+from json_handler import load_json, save_json
+
+HOTEL_FILE = "h_rec.json"
+CUSTOMER_FILE = "cust_rec.json"
+RESERVATION_FILE = "reservation_record.json"
+
 
 class Hotel:
-    def __init__(self, hotel_name, hotel_loc, num_rooms):
-        self.hotel_name = hotel_name
+    """Represents a hotel with attributes and methods"""
+
+    def __init__(self, h_name, hotel_loc, n_rooms):
+        """Initializes a hotel with name, location, and number of rooms."""
+        self.h_name = h_name
         self.hotel_loc = hotel_loc
-        self.num_rooms = num_rooms
-        self.availability_rooms = num_rooms
-        self.hotel_record = load_json(HOTEL_FILE)  
+        self.n_rooms = n_rooms
+        self.availability_rooms = n_rooms
+        self.h_rec = load_json(HOTEL_FILE)
 
     def save_hotel_record(self):
-        save_json(HOTEL_FILE, self.hotel_record)  
+        """Saves hotel records to a JSON file."""
+        save_json(HOTEL_FILE, self.h_rec)
 
     def define_hotel(self):
-        """Save hotel data to JSON"""
-        self.hotel_record[self.hotel_name] = {  
+        """Defines and saves hotel data to JSON."""
+        self.h_rec[self.h_name] = {
             "location": self.hotel_loc,
-            "num_rooms": self.num_rooms,
-            "available_rooms": self.availability_rooms,
+            "n_rooms": self.n_rooms,
+            "free_rooms": self.availability_rooms,
         }
         self.save_hotel_record()
 
     def delete_hotel(self):
-        if self.hotel_name in self.hotel_record:  
-            del self.hotel_record[self.hotel_name]
+        """Deletes the hotel from records."""
+        if self.h_name in self.h_rec:
+            del self.h_rec[self.h_name]
             self.save_hotel_record()
 
-    def display_hotel_info(self): 
-        print(f"Hotel details: {self.hotel_record[self.hotel_name]}")
-        
-    def modify_hotel(self, new_location=None, new_num_rooms=None, new_available_rooms=None):
-        self.hotel_record[self.hotel_name]["location"] = new_location
-        self.hotel_record[self.hotel_name]["num_rooms"] = new_num_rooms
-        self.hotel_record[self.hotel_name]["available_rooms"] = new_available_rooms
-        self.save_hotel_record()
-        print(f"Hotel {self.hotel_name} updated successfully.")
+    def display_hotel_info(self):
+        """Displays hotel details."""
+        print(f"Details: {self.h_rec.get(self.h_name, 'Hotel not found')}")
+
+    def modify_hotel(
+        self, new_location=None, new_num_rooms=None, new_available_rooms=None
+    ):
+        """Modifies hotel details such as location and room availability."""
+        if self.h_name in self.h_rec:
+            if new_location:
+                self.h_rec[self.h_name]["location"] = new_location
+            if new_num_rooms is not None:
+                self.h_rec[self.h_name]["n_rooms"] = new_num_rooms
+            if new_available_rooms is not None:
+                self.h_rec[self.h_name]["free_rooms"] = new_available_rooms
+            self.save_hotel_record()
+            print(f"Hotel {self.h_name} updated successfully.")
+        else:
+            print("Hotel not found.")
 
     def book_room(self):
-        if self.hotel_name in self.hotel_record:  
-            if self.hotel_record[self.hotel_name]["available_rooms"] > 0:
-                self.hotel_record[self.hotel_name]["available_rooms"] -= 1
+        """Books a room if available."""
+        if self.h_name in self.h_rec:
+            if self.h_rec[self.h_name]["free_rooms"] > 0:
+                self.h_rec[self.h_name]["free_rooms"] -= 1
                 self.save_hotel_record()
                 print("Room booked successfully!")
             else:
-                print("No rooms available at this time")
+                print("No rooms available at this time.")
         else:
-            print("Hotel not found")
+            print("Hotel not found.")
 
     def cancel_book(self):
-        if self.hotel_name in self.hotel_record: 
-            if self.hotel_record[self.hotel_name]["available_rooms"] < self.hotel_record[self.hotel_name]["num_rooms"]:
-                self.hotel_record[self.hotel_name]["available_rooms"] += 1
+        """Cancels a room booking if applicable."""
+        if self.h_name in self.h_rec:
+            if (
+                self.h_rec[self.h_name]["free_rooms"]
+                < self.h_rec[self.h_name]["n_rooms"]
+            ):
+                self.h_rec[self.h_name]["free_rooms"] += 1
                 self.save_hotel_record()
                 print("Booking canceled successfully!")
             else:
-                print("No active reservations")
+                print("No active reservations.")
         else:
-            print("Hotel not found")
+            print("Hotel not found.")
 
-
-
-CUSTOMER_FILE = "customer_record.json"
 
 class Customer:
-    def __init__(self, customer_name, customer_phone):
-        self.customer_name = customer_name
+    """Represents a customer with methods to manage customer records."""
+
+    def __init__(self, cus_name, customer_phone):
+        """Initializes a customer with name and phone number."""
+        self.cus_name = cus_name
         self.customer_phone = customer_phone
-        self.customer_record = load_json(CUSTOMER_FILE)
+        self.cust_rec = load_json(CUSTOMER_FILE)
 
     def save_customer_record(self):
-        save_json(CUSTOMER_FILE, self.customer_record)
+        """Saves customer records to a JSON file."""
+        save_json(CUSTOMER_FILE, self.cust_rec)
 
     def create_customer(self):
         """Creates a new customer and assigns a unique ID."""
-        customer_id = str(uuid.uuid4())  
-        self.customer_record[customer_id] = {
-            "name": self.customer_name,
+        cust_id = str(uuid.uuid4())
+        self.cust_rec[cust_id] = {
+            "name": self.cus_name,
             "phone": self.customer_phone,
             "customer_room": randint(1, 100),
         }
-        print(f"Customer {self.customer_name} created successfully with ID {customer_id}")
+        print(
+            f"Customer {self.cus_name} created successfully with ID {cust_id}"
+        )
         self.save_customer_record()
 
-    def customer_info(self, customer_id):
+    def customer_info(self, cust_id):
         """Retrieves customer details using their unique ID."""
-        if customer_id in self.customer_record:
-            print(f"Customer details: {self.customer_record[customer_id]}")
-        else:
-            print("Customer not found.")
+        print(
+            f"Details: {self.cust_rec.get(cust_id, 'Customer not found')}"
+        )
 
-    def delete_customer(self, customer_id):
+    def delete_customer(self, cust_id):
         """Deletes a customer by their ID."""
-        if customer_id in self.customer_record:
-            del self.customer_record[customer_id]
+        if cust_id in self.cust_rec:
+            del self.cust_rec[cust_id]
             self.save_customer_record()
-            print(f"Customer {customer_id} deleted successfully.")
+            print(f"Customer {cust_id} deleted successfully.")
         else:
             print("Customer not found.")
 
-    def edit_customer_info(self, customer_id, new_name=None, new_phone=None):
+    def edit_customer_info(self, cust_id, new_name=None, new_phone=None):
         """Edits a customer's information."""
-        if customer_id in self.customer_record:
+        if cust_id in self.cust_rec:
             if new_name:
-                self.customer_record[customer_id]["name"] = new_name
+                self.cust_rec[cust_id]["name"] = new_name
             if new_phone:
-                self.customer_record[customer_id]["phone"] = new_phone
-
+                self.cust_rec[cust_id]["phone"] = new_phone
             self.save_customer_record()
-            print(f"Customer {customer_id} updated successfully.")
+            print(f"Customer {cust_id} updated successfully.")
         else:
             print("Customer not found.")
 
 
 class Reservation:
-    def __init__(self, book_number, customer_name, hotel_name):
-        
-        self.book_number = book_number
-        self.customer_name = customer_name
-        self.hotel_name = hotel_name
+    """Represents a reservation with methods to manage bookings."""
+
+    def __init__(self, cus_name, h_name, num_days):
+        """Initializes a reservation"""
+        self.cus_name = cus_name
+        self.h_name = h_name
+        self.num_days = num_days
+        self.reservation_record = load_json(RESERVATION_FILE)
+
+    def save_reservation_record(self):
+        """Saves reservation records to a JSON file."""
+        save_json(RESERVATION_FILE, self.reservation_record)
 
     def create_reservation(self):
-        """Create a new reservation."""
-        pass
+        """Creates a reservation and assigns a unique ID."""
+        reservation_id = str(uuid.uuid4())
+        self.reservation_record[reservation_id] = {
+            "name": self.cus_name,
+            "hotel": self.h_name,
+            "num_days": self.num_days,
+        }
+        print(
+            f"Reservation created for {self.cus_name} with ID {reservation_id}"
+        )
+        self.save_reservation_record()
 
-    def cancel_reservation(self):
-        """Cancel a reservation."""
-        pass
-
+    def cancel_reservation(self, reservation_id):
+        """Cancels a reservation by its ID."""
+        if reservation_id in self.reservation_record:
+            del self.reservation_record[reservation_id]
+            self.save_reservation_record()
+            print("Reservation was deleted successfully.")
+        else:
+            print("Reservation was not found.")

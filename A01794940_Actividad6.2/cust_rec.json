@@ -1,0 +1,22 @@
+{
+    "d9b61394-4eb2-434a-9b58-8312a2c5dd99": {
+        "name": "John Doe",
+        "phone": "1234567890",
+        "customer_room": 60
+    },
+    "ed7fb8d8-78d9-46b0-8817-b88177413941": {
+        "name": "John Doe",
+        "phone": "1234567890",
+        "customer_room": 92
+    },
+    "6415bf56-38c3-482a-b3e3-1e5f14efbae5": {
+        "name": "John Doe",
+        "phone": "1234567890",
+        "customer_room": 50
+    },
+    "fa6ac07a-8931-42d2-b431-bcf28e9795d1": {
+        "name": "John Doe",
+        "phone": "1234567890",
+        "customer_room": 35
+    }
+}
