@@ -13,6 +13,13 @@ class Hotel:
 
     def __init__(self, h_name, hotel_loc, n_rooms):
         """Initializes a hotel with name, location, and number of rooms."""
+        if not h_name or not isinstance(h_name, str):
+            raise ValueError("Hotel name must be a non-empty string.")
+        if not hotel_loc or not isinstance(hotel_loc, str):
+            raise ValueError("Hotel location must be a non-empty string.")
+        if not isinstance(n_rooms, int) or n_rooms <= 0:
+            raise ValueError("Number of rooms must be a positive integer.")
+
         self.h_name = h_name
         self.hotel_loc = hotel_loc
         self.n_rooms = n_rooms
@@ -91,6 +98,11 @@ class Customer:
 
     def __init__(self, cus_name, customer_phone):
         """Initializes a customer with name and phone number."""
+        if not cus_name or not isinstance(cus_name, str):
+            raise ValueError("Customer name must be a non-empty string.")
+        if not isinstance(customer_phone, int) or customer_phone <= 0:
+            raise ValueError("Phone must be a positive integer.")
+
         self.cus_name = cus_name
         self.customer_phone = customer_phone
         self.cust_rec = load_json(CUSTOMER_FILE)
